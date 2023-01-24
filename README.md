@@ -1,5 +1,5 @@
 ## Training Session Agenda
-### This tutorial shows how to deploy a hyperledger fabric private network with Kubernetes in Azure cloud
+### This training shows how to deploy a hyperledger fabric private network with Kubernetes in Azure cloud
 - What to expect
 - SSH Login to dev machine
 - Pre reqs - az cli, docker, kubectl, jq, curl
