@@ -1,0 +1,56 @@
+## package_chaincode_for ${org}
+## transfer_chaincode_archive_for ${org}
+## install_chaincode_for ${org}
+
+## set_chaincode_id
+
+## package_chaincode_for
+  
+  mkdir -p build/chaincode
+
+  tar -C chaincode/asset-transfer-basic -zcf chaincode/asset-transfer-basic/code.tar.gz connection.json
+  tar -C chaincode/asset-transfer-basic -zcf build/chaincode/asset-transfer-basic.tgz code.tar.gz metadata.json
+
+  rm chaincode/asset-transfer-basic/code.tar.gz
+  
+  ===================
+  mkdir build
+   peer chaincode package  /
+    -o localhost:7050 /
+    --ordererTLSHostnameOverride orderer.example.com /
+    --tls /
+    --cafile /var/hyperledger/fabric/organizations/ordererOrganizations/org0.example.com/orderers/orderer.example.com/msp/tlscacerts/org0-tls-ca.pem /
+    -C mychannel /
+    -n fabcar /
+    --peerAddresses localhost:7051 /
+    --tlsRootCertFiles /var/hyperledger/fabric/organizations/peerOrganizations/org1.example.com/peers/org1-peer1.org1.example.com/tls/cacerts/org1-tls-ca.pem /
+    --peerAddresses localhost:9051 /
+    --tlsRootCertFiles /var/hyperledger/fabric/organizations/peerOrganizations/org1.example.com/peers/org1-peer2.org1.example.com/tls/cacerts/org1-tls-ca.pem /
+    -p '{"function":"changeCarOwner","Args":["CAR9","Dave"]}'
+    
+    
+    =================================
+    peer lifecycle chaincode package fabcar.tar.gz --path /root/fabric-samples/fabric-samples/fabcar/go --label fabcar
+
+  ================
+  export CORE_PEER_ADDRESS=org1-peer1:7051
+  sudo peer lifecycle chaincode install fabcar.tar.gz
+  
+  
+  
+  
+  ==================
+  peer chaincode invoke /
+    -o localhost:7050 /
+    --ordererTLSHostnameOverride orderer.example.com /
+    --tls /
+    --cafile /var/hyperledger/fabric/organizations/ordererOrganizations/org0.example.com/orderers/orderer.example.com/msp/tlscacerts/org0-tls-ca.pem /
+    -C mychannel /
+    -n fabcar /
+    --peerAddresses localhost:7051 /
+    --tlsRootCertFiles /var/hyperledger/fabric/organizations/peerOrganizations/org1.example.com/peers/org1-peer1.org1.example.com/tls/cacerts/org1-tls-ca.pem /
+    --peerAddresses localhost:9051 /
+    --tlsRootCertFiles /var/hyperledger/fabric/organizations/peerOrganizations/org1.example.com/peers/org1-peer2.org1.example.com/tls/cacerts/org1-tls-ca.pem /
+    -c '{"function":"changeCarOwner","Args":["CAR9","Dave"]}'
+    
+=============================

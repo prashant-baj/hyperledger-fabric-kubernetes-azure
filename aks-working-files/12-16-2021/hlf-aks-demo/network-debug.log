@@ -1,0 +1,9 @@
++ echo '
+  export CORE_PEER_ADDRESS=org1-peer1:7051
+  peer chaincode query -n asset-transfer-basic -C mychannel -c '\''{"Args":["ReadAsset","2"]}'\''
+  '
++ exec kubectl -n test-network exec deploy/org1-admin-cli -c main -i -- /bin/bash
++ exit_fn
++ rc=0
++ '[' 0 -ne 0 ']'
++ pkill -P 1955

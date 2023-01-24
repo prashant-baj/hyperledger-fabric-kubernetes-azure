@@ -1,0 +1,38 @@
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.0/deploy/static/provider/cloud/deploy.yaml
+
+
+export SAMPLE_APIKEY=97834158-3224-4CE7-95F9-A148C886653E
+curl -s --header "X-Api-Key: ${SAMPLE_APIKEY}" http://20.204.224.246/api/assets
+
+export CORE_PEER_ADDRESS=org1-peer1:7051
+peer chaincode query -n asset-transfer-basic -C mychannel -c '{"Args":["GetAllAssets"]}' \
+    --peerAddresses org1-peer1:7051 \
+    --tlsRootCertFiles /var/hyperledger/fabric/organizations/peerOrganizations/org1.example.com/peers/org1-peer1.org1.example.com/tls/cacerts/org1-tls-ca.pem \
+    
+
+peer lifecycle chaincode approveformyorg -n asset-transfer-basic -C mychannel \
+    --peerAddresses org2-peer1:7051 -v 1.0 --sequence 1 \
+    --tlsRootCertFiles /var/hyperledger/fabric/organizations/peerOrganizations/org2.example.com/peers/org2-peer1.org2.example.com/tls/cacerts/org2-tls-ca.pem \
+    -o org0-orderer1:6050 \
+    --cafile /var/hyperledger/fabric/organizations/ordererOrganizations/org0.example.com/msp/tlscacerts/org0-tls-ca.pem
+ 
+
+
+
+peer lifecycle chaincode checkcommitreadiness -n asset-transfer-basic -C mychannel \
+    --peerAddresses org1-peer1:7051 -v 2.0 --sequence 2 \
+    --tlsRootCertFiles /var/hyperledger/fabric/organizations/peerOrganizations/org1.example.com/peers/org1-peer1.org1.example.com/tls/cacerts/org1-tls-ca.pem \
+ 
+
+peer lifecycle chaincode approveformyorg -n asset-transfer-basic -C mychannel \
+    --peerAddresses org1-peer1:7051 -v 1.0 --sequence 1 \
+    --tlsRootCertFiles /var/hyperledger/fabric/organizations/peerOrganizations/org1.example.com/peers/org1-peer1.org1.example.com/tls/cacerts/org1-tls-ca.pem \
+    -o 10.0.237.149:6050 \
+    --cafile /var/hyperledger/fabric/organizations/ordererOrganizations/org0.example.com/msp/tlscacerts/org0-tls-ca.pem
+ 
+ 
+
+   --peerAddresses 10.0.135.152:7051 \
+    --tlsRootCertFiles /var/hyperledger/fabric/organizations/peerOrganizations/org1.example.com/peers/org1-peer2.org1.example.com/tls/cacerts/org1-tls-ca.pem \
+    

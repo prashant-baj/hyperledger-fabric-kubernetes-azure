@@ -1,0 +1,13 @@
+./network chaincode invoke '{"Args":["CreateAsset","1","blue","35","tom","1000"]}'
+./network chaincode query '{"Args":["ReadAsset","1"]}' | jq
+./network chaincode query '{"Args":["GetAllAssets"]}' | jq
+
+kubectl -n test-network exec deploy/org1-admin-cli -c main -i -- /bin/bash
+export CORE_PEER_ADDRESS=org1-peer1:7051
+peer chaincode query -n asset-transfer-basic -C mychannel -c '{"Args":["GetAllAssets"]}' \
+    --peerAddresses org1-peer1:7051 \
+    --tlsRootCertFiles /var/hyperledger/fabric/organizations/peerOrganizations/org1.example.com/peers/org1-peer1.org1.example.com/tls/cacerts/org1-tls-ca.pem \
+
+
+curl -s --header "X-Api-Key: 97834158-3224-4CE7-95F9-A148C886653E" http://20.204.239.162:3000/api/assets | jq
+curl -s --header "X-Api-Key: BC42E734-062D-4AEE-A591-5973CB763430" http://20.204.224.50:3000/api/assets | jq
